@@ -1,0 +1,195 @@
+<template>
+  <main class="flex flex-col min-h-full px-8 py-4">
+    <div class="card">
+      <DataTable
+        :value="tableData"
+        scrollable
+        scrollHeight="650px"
+        paginator
+        :rows="5"
+        :rowsPerPageOptions="[5, 10, 15]"
+        tableStyle="min-width: 50rem"
+        v-model:filters="filters"
+        :globalFilterFields="[
+          'firstName',
+          'lastName',
+          'otherName',
+          'age',
+          'gender',
+          'phone',
+        ]"
+      >
+        <template #header>
+          <div class="flex justify-content-end">
+            <div class="flex items-center w-full justify-between">
+              <div class="flex flex-col gap-1">
+                <h1 class="text-2xl font-bold text-gray-800">
+                  {{ route.name }}
+                </h1>
+                <p class="text-gray-600 italic">{{ route.meta.description }}</p>
+              </div>
+              <div class="flex gap-2">
+                <IconField iconPosition="left">
+                  <InputIcon>
+                    <i class="pi pi-search"></i>
+                  </InputIcon>
+                  <InputText
+                    v-model="filters['global'].value"
+                    placeholder="Keyword Search"
+                  />
+                </IconField>
+                <button
+                  @click="modal_add = true"
+                  class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors duration-300"
+                >
+                  Add Patient
+                </button>
+              </div>
+            </div>
+          </div>
+        </template>
+        <template #empty> No Data found. </template>
+        <Column field="date" header="Created At" style="width: 8%"></Column>
+        <Column
+          field="firstName"
+          header="First Name"
+          style="width: 11%"
+        ></Column>
+        <Column field="lastName" header="Last Name" style="width: 11%"></Column>
+        <Column
+          field="otherName"
+          header="Other Names"
+          style="width: 10%"
+        ></Column>
+        <Column header="Age" style="width: 10%">
+          <template #body="{ data }"> {{ data.age }} yrs </template>
+        </Column>
+        <Column field="gender" header="Gender" style="width: 15%"></Column>
+        <Column field="phone" header="Number" style="width: 15%"></Column>
+        <Column header="Allergies" style="width: 20%">
+          <template #body="slotProps">
+            <el-tag
+              v-for="(allergy, index) in slotProps.data.allergies"
+              :key="index"
+              class="tag-item"
+              type="error"
+              style="margin-right: 8px"
+            >
+              {{ allergy }}
+            </el-tag></template
+          >
+        </Column>
+        <Column header="Actions">
+          <template #body="slotProps">
+            <div class="flex flex-row gap-4">
+              <Button
+              @click="updateData(slotProps.data)"
+                icon="pi pi-pencil"
+                severity="info"
+                variant="text"
+                raised
+                rounded
+                aria-label="Search"
+                size="small"
+              />
+              <Button
+              @click="confirmDelete(slotProps.data)"
+                icon="pi pi-times"
+                severity="danger"
+                variant="text"
+                raised
+                rounded
+                aria-label="Cancel"
+                size="small"
+              />
+            </div>
+          </template>
+        </Column>
+      </DataTable>
+    </div>
+  </main>
+  <AddPatient v-if="modal_add" @close="modal_add = false" />
+  <UpdatePatient v-if="modal_update" @close="modal_update = false" :data="selectedData" />
+  <DeleteDialog v-if="modal_delete" @close="modal_delete = false" @delete="deleleData" />
+</template>
+
+<script setup>
+import { useRoute } from "vue-router";
+import { ref, onMounted } from "vue";
+import { ElLoading } from "element-plus";
+import {
+  collection,
+  getDocs,
+  onSnapshot,
+  query,
+  where,
+  doc,
+  deleteDoc,
+} from "firebase/firestore";
+import { db } from "../../firebase";
+import { useStore } from "vuex";
+import AddPatient from "../../components/AddPatient.vue";
+import DeleteDialog from "../../components/DeleteDialog.vue";
+import UpdatePatient from "../../components/UpdatePatient.vue";
+
+const modal_add = ref(false);
+const modal_delete = ref(false);
+const modal_update = ref(false);
+const tableData = ref([]);
+// const data = ref([]);
+const route = useRoute();
+const selectedData = ref(null);
+const store = useStore();
+
+const filters = ref({
+  global: { value: null },
+  name: { value: null },
+  "country.name": { value: null },
+  representative: { value: null },
+  status: { value: null },
+  verified: { value: null },
+});
+
+onMounted(() => {
+  const loadingInstance = ElLoading.service({
+    lock: true,
+    text: "Loading Patients Data...",
+  });
+
+  const usersCollection = query(
+    collection(db, "patients"),
+    where("companyId", "==", store.state.companyID),
+    // orderBy("createdAt", "desc"),
+  );
+  onSnapshot(usersCollection, (snapshot) => {
+    tableData.value = snapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+    loadingInstance.close();
+  });
+});
+
+const updateData = (data) => {
+  selectedData.value = data;
+  modal_update.value = true;
+};
+
+const confirmDelete = (data) => {
+  selectedData.value = data;
+  modal_delete.value = true;
+};
+
+const deleleData = async () => {
+  const loadingInstance = ElLoading.service({
+    lock: true,
+    text: "Deleting Patients Data...",
+  });
+  if (!selectedData.value) return;
+  const docRef = doc(db, "patients", selectedData.value.id);
+  await deleteDoc(docRef);
+  modal_delete.value = false;
+
+  loadingInstance.close();
+};
+</script>
