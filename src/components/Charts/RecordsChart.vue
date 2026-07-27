@@ -50,67 +50,60 @@
     <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 gap-4 px-1">
       <div class="flex flex-col gap-2">
         <div
-          class="bg-purple text-white h-26 rounded shadow shadow-purple px-8 flex gap-2 justify-between items-center relative overflow-hidden"
+          class=" bg-white h-26 rounded shadow shadow-purple px-8 flex gap-2 justify-between items-center relative overflow-hidden"
         >
           <span class="text-lg italic">Patients Waiting</span>
-          <h2 class="text-4xl italic">{{ totalWaiting }}</h2>
-          <!-- <span
-            class="absolute top-0 right-0 w-12 h-12 bg-purple text-white rounded-bl flex items-center justify-center"
-            ><i class="pi pi-clock"></i
-          ></span> -->
+          <h2 class="text-4xl italic font-medium">{{ totalWaiting }}</h2>
         </div>
         <div
-          class="h-26 rounded shadow bg-purple text-white px-8 flex gap-2 justify-between items-center relative overflow-hidden"
+          class="h-26 rounded shadow shadow-purple bg-white px-8 flex gap-2 justify-between items-center relative overflow-hidden"
         >
           <span class="text-lg italic"
             >Pateints Waiting For Consultation</span
           >
-          <h2 class="text-4xl italic">
+          <h2 class="text-4xl italic font-medium">
             {{ totalWaitingConsultation }}
           </h2>
-          <!-- <span
-            class="absolute top-0 right-0 w-12 h-12 bg-purple text-white rounded-bl flex items-center justify-center"
-            ><i class="pi pi-clock"></i
-          ></span> -->
         </div>
         <div
-          class="h-26 rounded px-8 flex gap-2 items-center shadow bg-green text-white"
+          class="h-26 rounded px-8 flex gap-2 items-center shadow shadow-green bg-white"
         >
           <span class="text-lg w-1/2 italic"
             >Total Appointments for the Month of
             {{ months[currentMonthIndex] }}:
           </span>
-          <h2 class="text-4xl w-1/2 text-end italic">
+          <h2 class="text-4xl w-1/2 text-end italic font-medium">
             {{ monthlyAppointments }}
           </h2>
         </div>
         <div
-          class="h-26 rounded px-8 flex gap-2 items-center shadow bg-purple text-white"
+          class="h-26 rounded px-8 flex gap-2 items-center shadow shadow-purple bg-white"
         >
           <span class="text-lg w-1/2 italic"
             >Total Visits for the Month of {{ months[currentMonthIndex] }}:
           </span>
-          <h2 class="text-4xl w-1/2 text-end italic">{{ monthlyVisits }}</h2>
+          <h2 class="text-4xl w-1/2 text-end italic font-medium">{{ monthlyVisits }}</h2>
         </div>
         <div
-          class="h-26 rounded px-8 flex gap-2 items-center shadow bg-orange text-white"
+          class="h-26 rounded px-8 flex gap-2 items-center shadow shadow-orange bg-white"
         >
           <span class="text-lg w-1/2 italic"
             >Total Services for the Month of {{ months[currentMonthIndex] }}:
           </span>
-          <h2 class="text-4xl w-1/2 text-end italic">{{ monthlyServices }}</h2>
+          <h2 class="text-4xl w-1/2 text-end italic font-medium">{{ monthlyServices }}</h2>
         </div>
         <div
-          class="h-26 rounded px-8 flex gap-2 items-center shadow bg-blue text-white"
+          class="h-26 rounded px-8 flex gap-2 items-center shadow shadow-blue bg-white"
         >
           <span class="text-lg w-1/2 italic"
             >Total Revenue for the Month of {{ months[currentMonthIndex] }}:
           </span>
-          <h2 class="text-4xl w-1/2 text-end italic">
-            Ghc{{ monthlyRevenue.toFixed(2) }}
+          <h2 class="text-4xl w-1/2 text-end italic font-medium">
+            <small class="text-lg font-normal">Ghc </small>{{ monthlyRevenue.toFixed(2) }}
           </h2>
         </div>
       </div>
+      
       <div class="bg-white rounded shadow-lg p-6 w-full">
         <FullCalendar :options="calendarOptions" class="w-full"/>
       </div>

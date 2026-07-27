@@ -146,6 +146,7 @@ import { useStore } from "vuex";
 import AddNewAppointment from "../../components/AddNewAppointment.vue";
 import UpdateAppointment from "../../components/UpdateAppointment.vue";
 import AddNewReport from "../../components/AddNewReport.vue";
+import ViewPatientDetails from "../../components/ViewPatientDetails.vue";
 
 const selectedFilter = ref("All");
 const filterOptions = ["Today", "All"];

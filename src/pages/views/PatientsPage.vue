@@ -50,11 +50,15 @@
         </template>
         <template #empty> No Data found. </template>
         <Column field="date" header="Created At" style="width: 8%"></Column>
-        <Column
-          field="firstName"
-          header="First Name"
-          style="width: 11%"
-        ></Column>
+        <Column header="First Name" style="width: 11%">
+          <template #body="slotProps">
+            <el-link
+              @click="viewPatient(slotProps.data.patientID)"
+              type="primary"
+              >{{ slotProps.data.firstName }}</el-link
+            >
+          </template>
+        </Column>
         <Column field="lastName" header="Last Name" style="width: 11%"></Column>
         <Column
           field="otherName"
@@ -83,7 +87,17 @@
           <template #body="slotProps">
             <div class="flex flex-row gap-4">
               <Button
-              @click="updateData(slotProps.data)"
+                @click="viewHistory(slotProps.data.patientID)"
+                icon="pi pi-history"
+                severity="help"
+                variant="text"
+                raised
+                rounded
+                aria-label="Search"
+                size="small"
+              />
+              <Button
+                @click="updateData(slotProps.data)"
                 icon="pi pi-pencil"
                 severity="info"
                 variant="text"
@@ -93,7 +107,7 @@
                 size="small"
               />
               <Button
-              @click="confirmDelete(slotProps.data)"
+                @click="confirmDelete(slotProps.data)"
                 icon="pi pi-times"
                 severity="danger"
                 variant="text"
@@ -109,8 +123,17 @@
     </div>
   </main>
   <AddPatient v-if="modal_add" @close="modal_add = false" />
-  <UpdatePatient v-if="modal_update" @close="modal_update = false" :data="selectedData" />
-  <DeleteDialog v-if="modal_delete" @close="modal_delete = false" @delete="deleleData" />
+  <UpdatePatient
+    v-if="modal_update"
+    @close="modal_update = false"
+    :data="selectedData"
+  />
+  <DeleteDialog
+    v-if="modal_delete"
+    @close="modal_delete = false"
+    @delete="deleleData"
+  />
+   <ViewPatientDetails v-if="modal_view" @close="modal_view = false" :id="selectedId" />
 </template>
 
 <script setup>
@@ -131,14 +154,19 @@ import { useStore } from "vuex";
 import AddPatient from "../../components/AddPatient.vue";
 import DeleteDialog from "../../components/DeleteDialog.vue";
 import UpdatePatient from "../../components/UpdatePatient.vue";
+import ViewPatientDetails from "../../components/ViewPatientDetails.vue";
+import { useRouter } from "vue-router";
+const router = useRouter();
 
 const modal_add = ref(false);
 const modal_delete = ref(false);
 const modal_update = ref(false);
+const modal_view = ref(false);
 const tableData = ref([]);
 // const data = ref([]);
 const route = useRoute();
 const selectedData = ref(null);
+const selectedId = ref(null);
 const store = useStore();
 
 const filters = ref({
@@ -175,6 +203,11 @@ const updateData = (data) => {
   modal_update.value = true;
 };
 
+const viewPatient = (id) => {
+  selectedId.value = id;
+  modal_view.value = true;
+};
+
 const confirmDelete = (data) => {
   selectedData.value = data;
   modal_delete.value = true;
@@ -191,5 +224,14 @@ const deleleData = async () => {
   modal_delete.value = false;
 
   loadingInstance.close();
+};
+
+const viewHistory = (patientId) => {
+  router.push({
+    name: "PatientHistory",
+    params: {
+      patientId: patientId,
+    },
+  });
 };
 </script>
