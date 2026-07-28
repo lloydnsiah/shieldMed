@@ -107,6 +107,7 @@
                 size="small"
               />
               <Button
+              v-if="store.state.userrole === 'Admin'"
                 @click="confirmDelete(slotProps.data)"
                 icon="pi pi-times"
                 severity="danger"

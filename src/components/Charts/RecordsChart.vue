@@ -39,7 +39,7 @@
       >
         <span class="text-lg text-gray-700 italic">Today's Revenue</span>
         <h2 class="text-5xl font-bold text-blue">
-          GH₵ {{ todayRevenue.toFixed(2) }}
+          <small class="font-normal text-xl">GH₵</small> {{ todayRevenue.toFixed(2) }}
         </h2>
         <span
           class="absolute top-0 right-0 w-12 h-12 bg-blue text-white rounded-bl flex items-center justify-center"

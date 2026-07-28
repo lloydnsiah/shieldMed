@@ -2,7 +2,9 @@
   <main>
     <!-- From Uiverse.io by zanina-yassine -->
     <form class="form_container">
-      <div class="logo_container"></div>
+      <div class="logo_container">
+         <i class="pi pi-user text-gray-300" style="font-size: 3rem"></i>
+      </div>
       <div class="title_container">
         <p class="title">Login to your Account</p>
         <span class="subtitle"
@@ -178,6 +180,9 @@ main {
   filter: drop-shadow(0px 0.5px 0.5px #efefef)
     drop-shadow(0px 1px 0.5px rgba(239, 239, 239, 0.5));
   border-radius: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .title_container {

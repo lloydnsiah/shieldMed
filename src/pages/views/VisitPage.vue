@@ -74,13 +74,13 @@
           style="width: 10%"
         ></Column>
         <Column field="phone" header="Number" style="width: 10%"></Column>
-        <Column field="status" header="Status" style="width: 10%"></Column>
         <Column
           field="doctor"
           header="Doctor Needed"
           style="width: 10%"
         ></Column>
         <Column field="reason" header="Reason" style="width: 20%"></Column>
+        <Column field="status" header="Status" style="width: 10%"></Column>
         <Column header="Actions">
           <template #body="slotProps">
             <div class="flex flex-row gap-4">

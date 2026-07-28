@@ -4,7 +4,7 @@
         <div class="flex items-center gap-4">
             <img src="../images/shield_logo.png" alt="Logo" class="w-8 h-8" />
             <div>
-                <h1 class="text-white text-lg font-bold italic">Shield Medical Center</h1>
+                <h1 class="text-white text-lg font-bold italic">{{ store.state.companyName }}</h1>
                 <span class="text-gray-400 text-sm italic">Role: {{ store.state.userrole }}</span>
             </div>
         </div>

@@ -13,7 +13,7 @@
         :globalFilterFields="[
           'name',
           'email',
-          'phone',
+          'number',
           'role',
           'companyName',
         ]"
@@ -56,7 +56,7 @@
         <Column field="status" header="Status" style="width: 10%"></Column>
         <Column field="companyName" header="Company" style="width: 15%"></Column>
         
-        <Column header="Actions">
+        <Column header="Actions"  v-if="store.state.userrole === 'Admin'">
           <template #body="slotProps">
             <div class="flex flex-row gap-4">
               <Button
@@ -122,7 +122,7 @@ const filters = ref({
   global: { value: null },
   name: { value: null },
   email: { value: null },
-  phone: { value: null },
+  number: { value: null },
   role: { value: null },
   companyName: { value: null },
 });

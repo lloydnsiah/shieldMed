@@ -7,6 +7,7 @@ import 'element-plus/dist/index.css'
 import App from './App.vue'
 import router from './router/routes'
 import store from "./store"
+import Print from "vue3-print-nb";
 
 import './firebase'
 
@@ -21,5 +22,6 @@ app.use(PrimeVue, {
 })
 app.use(router)
 app.use(store)
+app.use(Print);
 app.use(ElementPlus)    
 app.mount('#app')

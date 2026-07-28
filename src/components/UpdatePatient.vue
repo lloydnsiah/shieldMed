@@ -14,7 +14,7 @@
         class="space-y-2"
       >
         <div class="grid grid-cols-3 gap-2">
-          <el-form-item prop="name">
+          <el-form-item prop="name" label="Name">
             <el-input v-model="form.firstName" placeholder="First Name" />
           </el-form-item>
           <el-form-item prop="name">
@@ -69,7 +69,7 @@
         </el-form-item>
         <div class="flex gap-1 items-center-safe">
           <div class="grid grid-cols-2 gap-2 w-full">
-            <el-form-item>
+            <el-form-item label="Name & Contact">
               <el-input
                 v-model="form.emergencyContactName"
                 placeholder="Emergency Contact Name"
@@ -236,6 +236,7 @@ main {
   background-color: #fff;
   padding: 30px;
   max-height: 90vh;
+  width: 45vw;
   border-radius: 8px;
   overflow: auto;
   font-family:
