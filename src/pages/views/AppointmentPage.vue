@@ -138,6 +138,7 @@ import {
   onSnapshot,
   query,
   where,
+  orderBy,
   doc,
   deleteDoc,
 } from "firebase/firestore";
@@ -205,7 +206,7 @@ onMounted(() => {
   const usersCollection = query(
     collection(db, "appointments"),
     where("companyId", "==", store.state.companyID),
-    // orderBy("createdAt", "desc"),
+    orderBy("createdAt", "desc"),
   );
   onSnapshot(usersCollection, (snapshot) => {
     tableData.value = snapshot.docs.map((doc) => ({
@@ -213,7 +214,6 @@ onMounted(() => {
       ...doc.data(),
     }));
     loadingInstance.close();
-    console.log("Data", tableData.value);
   });
 });
 

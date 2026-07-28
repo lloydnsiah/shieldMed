@@ -289,7 +289,7 @@ import { ref, onMounted, onUnmounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
 import { ElLoading } from "element-plus";
-import { collection, onSnapshot, query, where } from "firebase/firestore";
+import { collection, onSnapshot, query, where, orderBy, } from "firebase/firestore";
 import { db } from "../../firebase";
 import { computed } from "vue";
 
@@ -345,6 +345,7 @@ onMounted(() => {
     collection(db, "invoices"),
     where("companyId", "==", companyId),
     where("patient.id", "==", patientId),
+    orderBy("createdAt", "desc"),
   );
 
   const unsubInvoices = onSnapshot(invoiceQuery, (snapshot) => {
@@ -360,6 +361,7 @@ onMounted(() => {
     collection(db, "visits"),
     where("companyId", "==", companyId),
     where("patientID", "==", patientId),
+    orderBy("createdAt", "desc"),
   );
 
   const unsubVisits = onSnapshot(visitQuery, (snapshot) => {
@@ -375,6 +377,7 @@ onMounted(() => {
     collection(db, "appointments"),
     where("companyId", "==", companyId),
     where("patientID", "==", patientId),
+    orderBy("createdAt", "desc"),
   );
 
   const unsubAppointments = onSnapshot(appointmentQuery, (snapshot) => {

@@ -102,6 +102,7 @@ import {
   onSnapshot,
   query,
   where,
+  orderBy,
   doc,
   deleteDoc,
 } from "firebase/firestore";
@@ -137,7 +138,7 @@ onMounted(() => {
   const usersCollection = query(
     collection(db, "services"),
     where("companyId", "==", store.state.companyID),
-    // orderBy("createdAt", "desc"),
+    orderBy("createdAt", "desc"),
   );
   onSnapshot(usersCollection, (snapshot) => {
     tableData.value = snapshot.docs.map((doc) => ({
