@@ -5,7 +5,7 @@
         :value="filteredData"
         scrollable
         scrollHeight="650px"
-        paginator
+        :paginator="filteredData?.length > 5"
         :rows="5"
         :rowsPerPageOptions="[5, 10, 15]"
         tableStyle="min-width: 50rem"

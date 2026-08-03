@@ -5,7 +5,7 @@
         :value="filteredData"
         scrollable
         scrollHeight="650px"
-        paginator
+        :paginator="filteredData?.length > 5"
         :rows="5"
         :rowsPerPageOptions="[5, 10, 15]"
         tableStyle="min-width: 50rem"
@@ -60,14 +60,15 @@
           header="Patient Name"
           style="width: 18%"
         ></Column>
-        <Column
-          header="Patient ID"
-          style="width: 14%"
-        >
-      <template #body="slotProps">
-        <el-link @click="viewPatient(slotProps.data.patientID)" type="primary">{{ slotProps.data.patientID }}</el-link>
-      </template>
-      </Column>
+        <Column header="Patient ID" style="width: 14%">
+          <template #body="slotProps">
+            <el-link
+              @click="viewPatient(slotProps.data.patientID)"
+              type="primary"
+              >{{ slotProps.data.patientID }}</el-link
+            >
+          </template>
+        </Column>
         <Column
           field="patientType"
           header="Patient Type"
@@ -143,7 +144,11 @@
     @close="modal_delete = false"
     @delete="deleleData"
   />
-  <ViewPatientDetails v-if="modal_view" @close="modal_view = false" :id="selectedId" />
+  <ViewPatientDetails
+    v-if="modal_view"
+    @close="modal_view = false"
+    :id="selectedId"
+  />
 </template>
 
 <script setup>

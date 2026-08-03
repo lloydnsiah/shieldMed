@@ -1,9 +1,9 @@
 <template>
   <main>
     <!-- From Uiverse.io by zanina-yassine -->
-    <form class="form_container">
+    <form class="form_container relative">
       <div class="logo_container">
-         <i class="pi pi-user text-gray-300" style="font-size: 3rem"></i>
+        <i class="pi pi-user text-gray-300" style="font-size: 3rem"></i>
       </div>
       <div class="title_container">
         <p class="title">Login to your Account</p>
@@ -39,11 +39,12 @@
         </svg>
         <input
           placeholder="name@mail.com"
-          title="Inpit title"
+          title="Input email"
           name="input-name"
           type="text"
           class="input_field"
           id="email_field"
+          autocomplete="email"
           v-model="useremail"
         />
       </div>
@@ -82,25 +83,12 @@
           type="password"
           class="input_field"
           id="password_field"
+          autocomplete="current-password"
           v-model="password"
         />
       </div>
-      <button
-        title="Sign In"
-        type="submit"
-        class="sign-in_btn hover:bg-green"
-        @click.prevent="login"
-      >
-        <span>Sign In</span>
-      </button>
-      <button
-        title="Close"
-        type="button"
-        @click="handleClick"
-        class="mt-3 border w-full rounded-lg py-1.5 border-gray-400 cursor-pointer hover:bg-red-400 transition-all ease-in hover:text-white"
-      >
-        <span>Close</span>
-      </button>
+      <el-button type="primary" @click.prevent="login" class="mt-5 w-full">Sign In</el-button>
+      <el-button type="danger" class="absolute top-8 right-8" @click="handleClick">Close</el-button>
     </form>
   </main>
 </template>
@@ -265,5 +253,5 @@ main {
 
 .sign-in_btn:hover {
   background: green;
-  }
+}
 </style>

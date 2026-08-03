@@ -5,7 +5,7 @@
         :value="filteredData"
         scrollable
         scrollHeight="650px"
-        paginator
+        :paginator="filteredData?.length > 5"
         :rows="5"
         :rowsPerPageOptions="[5, 10, 15]"
         tableStyle="min-width: 50rem"
@@ -59,31 +59,33 @@
           header="Patient Name"
           style="width: 22%"
         ></Column>
-        <Column field="patient.id" header="Patient ID" style="width: 14%"></Column>
         <Column
-          header="Services"
-          style="width: 11%"
-        >
-        <template #body="slotProps">
-         {{ slotProps.data.services.length }}
-        </template>
-      </Column>
-        <Column
-          header="Extra Service"
-          style="width: 11%"
-        >
-        <template #body="slotProps">
-         {{ slotProps.data.additionalCharges.length }}
-        </template>
-      </Column>
+          field="patient.id"
+          header="Patient ID"
+          style="width: 14%"
+        ></Column>
+        <Column header="Services" style="width: 11%">
+          <template #body="slotProps">
+            {{ slotProps.data.services.length }}
+          </template>
+        </Column>
+        <Column header="Extra Service" style="width: 11%">
+          <template #body="slotProps">
+            {{ slotProps.data.additionalCharges.length }}
+          </template>
+        </Column>
         <Column field="total" header="Total" style="width: 10%"></Column>
         <Column field="discount" header="Discount" style="width: 10%"></Column>
-        <Column field="grandtotal" header="Gross Total" style="width: 10%"></Column>
+        <Column
+          field="grandtotal"
+          header="Gross Total"
+          style="width: 10%"
+        ></Column>
         <Column header="Actions">
           <template #body="slotProps">
             <div class="flex flex-row gap-4">
               <Button
-               @click="viewInvoice(slotProps.data)"
+                @click="viewInvoice(slotProps.data)"
                 icon="pi pi-eye"
                 severity="info"
                 variant="text"
@@ -108,7 +110,11 @@
       </DataTable>
     </div>
   </main>
- <ViewInvoice v-if="modal_view" @close="modal_view = false" :data="selectedData" />
+  <ViewInvoice
+    v-if="modal_view"
+    @close="modal_view = false"
+    :data="selectedData"
+  />
 </template>
 
 <script setup>

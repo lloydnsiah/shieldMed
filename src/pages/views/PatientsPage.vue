@@ -5,7 +5,7 @@
         :value="tableData"
         scrollable
         scrollHeight="650px"
-        paginator
+        :paginator="tableData?.length > 5"
         :rows="5"
         :rowsPerPageOptions="[5, 10, 15]"
         tableStyle="min-width: 50rem"
@@ -107,7 +107,7 @@
                 size="small"
               />
               <Button
-              v-if="store.state.userrole === 'Admin'"
+                v-if="store.state.userrole === 'Admin'"
                 @click="confirmDelete(slotProps.data)"
                 icon="pi pi-times"
                 severity="danger"
@@ -134,7 +134,11 @@
     @close="modal_delete = false"
     @delete="deleleData"
   />
-   <ViewPatientDetails v-if="modal_view" @close="modal_view = false" :id="selectedId" />
+  <ViewPatientDetails
+    v-if="modal_view"
+    @close="modal_view = false"
+    :id="selectedId"
+  />
 </template>
 
 <script setup>

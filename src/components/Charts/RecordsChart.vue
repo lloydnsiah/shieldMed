@@ -1,5 +1,13 @@
 <template>
   <section class="flex flex-col gap-4">
+    <el-select v-model="selectedYear" style="width: 150px" v-if="availableYears.length > 1">
+      <el-option
+        v-for="year in availableYears"
+        :key="year"
+        :label="year"
+        :value="year"
+      />
+    </el-select>
     <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-4 px-1">
       <div
         class="bg-white h-36 rounded shadow shadow-green px-8 flex flex-col gap-2 justify-center relative overflow-hidden"
@@ -39,7 +47,8 @@
       >
         <span class="text-lg text-gray-700 italic">Today's Revenue</span>
         <h2 class="text-5xl font-bold text-blue">
-          <small class="font-normal text-xl">GH₵</small> {{ todayRevenue.toFixed(2) }}
+          <small class="font-normal text-xl">GH₵</small>
+          {{ todayRevenue.toFixed(2) }}
         </h2>
         <span
           class="absolute top-0 right-0 w-12 h-12 bg-blue text-white rounded-bl flex items-center justify-center"
@@ -50,7 +59,7 @@
     <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 gap-4 px-1">
       <div class="flex flex-col gap-2">
         <div
-          class=" bg-white h-26 rounded shadow shadow-purple px-8 flex gap-2 justify-between items-center relative overflow-hidden"
+          class="bg-white h-26 rounded shadow shadow-purple px-8 flex gap-2 justify-between items-center relative overflow-hidden"
         >
           <span class="text-lg italic">Patients Waiting</span>
           <h2 class="text-4xl italic font-medium">{{ totalWaiting }}</h2>
@@ -58,9 +67,7 @@
         <div
           class="h-26 rounded shadow shadow-purple bg-white px-8 flex gap-2 justify-between items-center relative overflow-hidden"
         >
-          <span class="text-lg italic"
-            >Pateints Waiting For Consultation</span
-          >
+          <span class="text-lg italic">Pateints Waiting For Consultation</span>
           <h2 class="text-4xl italic font-medium">
             {{ totalWaitingConsultation }}
           </h2>
@@ -82,7 +89,9 @@
           <span class="text-lg w-1/2 italic"
             >Total Visits for the Month of {{ months[currentMonthIndex] }}:
           </span>
-          <h2 class="text-4xl w-1/2 text-end italic font-medium">{{ monthlyVisits }}</h2>
+          <h2 class="text-4xl w-1/2 text-end italic font-medium">
+            {{ monthlyVisits }}
+          </h2>
         </div>
         <div
           class="h-26 rounded px-8 flex gap-2 items-center shadow shadow-orange bg-white"
@@ -90,7 +99,9 @@
           <span class="text-lg w-1/2 italic"
             >Total Services for the Month of {{ months[currentMonthIndex] }}:
           </span>
-          <h2 class="text-4xl w-1/2 text-end italic font-medium">{{ monthlyServices }}</h2>
+          <h2 class="text-4xl w-1/2 text-end italic font-medium">
+            {{ monthlyServices }}
+          </h2>
         </div>
         <div
           class="h-26 rounded px-8 flex gap-2 items-center shadow shadow-blue bg-white"
@@ -99,13 +110,14 @@
             >Total Revenue for the Month of {{ months[currentMonthIndex] }}:
           </span>
           <h2 class="text-4xl w-1/2 text-end italic font-medium">
-            <small class="text-lg font-normal">Ghc </small>{{ monthlyRevenue.toFixed(2) }}
+            <small class="text-lg font-normal">Ghc </small
+            >{{ monthlyRevenue.toFixed(2) }}
           </h2>
         </div>
       </div>
-      
+
       <div class="bg-white rounded shadow-lg p-6 w-full">
-        <FullCalendar :options="calendarOptions" class="w-full"/>
+        <FullCalendar :options="calendarOptions" class="w-full" />
       </div>
     </div>
 
@@ -189,6 +201,19 @@ const months = [
 const today = new Date();
 const store = useStore();
 const currentMonthIndex = today.getMonth();
+const selectedYear = ref(new Date().getFullYear());
+
+const availableYears = computed(() => {
+  const years = new Set();
+
+  invoiceData.value.forEach((item) => {
+    if (item.createdAt) {
+      years.add(item.createdAt.toDate().getFullYear());
+    }
+  });
+
+  return [...years].sort((a, b) => b - a);
+});
 
 // Live Firestore data buckets
 const invoiceData = ref([]);
@@ -275,8 +300,9 @@ const yearlyRevenueArray = computed(() => {
   const dataset = Array(12).fill(0);
   invoiceData.value.forEach((invoice) => {
     if (!invoice.createdAt) return;
-    const month = invoice.createdAt.toDate().getMonth();
-    dataset[month] += Number(invoice.grandtotal || 0);
+    const date = invoice.createdAt.toDate();
+    if (date.getFullYear() !== selectedYear.value) return;
+    dataset[date.getMonth()] += Number(invoice.grandtotal || 0);
   });
   return dataset;
 });
@@ -285,8 +311,10 @@ const yearlyAppointmentsArray = computed(() => {
   const dataset = Array(12).fill(0);
   appointmentData.value.forEach((item) => {
     if (!item.createdAt) return;
-    const month = item.createdAt.toDate().getMonth();
-    dataset[month]++;
+    const date = item.createdAt.toDate();
+    if (date.getFullYear() !== selectedYear.value) return;
+    dataset[date.getMonth()]++;
+
   });
   return dataset;
 });
@@ -295,8 +323,9 @@ const yearlyVisitsArray = computed(() => {
   const dataset = Array(12).fill(0);
   visitData.value.forEach((item) => {
     if (!item.createdAt) return;
-    const month = item.createdAt.toDate().getMonth();
-    dataset[month]++;
+    const date = item.createdAt.toDate();
+    if (date.getFullYear() !== selectedYear.value) return;
+    dataset[date.getMonth()]++;
   });
   return dataset;
 });
